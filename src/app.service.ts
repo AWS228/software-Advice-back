@@ -7,7 +7,7 @@ export class AppService {
   constructor(private mailService: MailService) {}
 
   getHello(): string {
-    return 'Hello World!';
+    return 'Welcome to TechBolted!';
   }
 
   async contactUs(contactusDto: ContactusDto) {
