@@ -2,6 +2,7 @@ import { Body, Controller, Get, HttpCode, HttpStatus, Post, UseInterceptors } fr
 import { AppService } from './app.service';
 import { ContactusDto } from './dto/contactus.dto';
 import { NoFilesInterceptor } from '@nestjs/platform-express';
+import { Throttle } from '@nestjs/throttler';
 
 @Controller()
 export class AppController {
@@ -12,6 +13,7 @@ export class AppController {
     return this.appService.getHello();
   }
 
+  @Throttle({default:{limit: 3, ttl: 60000}})
   @Post('contact-us')
   @UseInterceptors(NoFilesInterceptor())
   @HttpCode(HttpStatus.OK)

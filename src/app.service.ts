@@ -9,6 +9,7 @@ export class AppService {
   getHello(): string {
     return 'Hello World!';
   }
+  
   async contactUs(contactusDto: ContactusDto) {
     console.log('contactusDto',contactusDto)
     const { name, email, subject, message } = contactusDto;
