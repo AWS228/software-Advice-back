@@ -1,0 +1,39 @@
+name: Deploy TechBolt Backend (Self-hosted)
+
+on:
+  push:
+    branches: [main]  # adjust if needed
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Copy Environment File
+        run: cp /var/www/html/techbolted-envs/env-backend .env
+
+      - name: Install Dependencies
+        run: yarn install
+
+      - name: Build (Optional, skip if not needed)
+        run: |
+          if [ -f "tsconfig.json" ]; then
+            echo "Detected TypeScript. Building..."
+            yarn build
+          else
+            echo "No build step required"
+          fi
+
+      - name: Start or Restart PM2 Process
+        run: |
+          if pm2 list | grep -q "api-techbolt"; then
+            echo "Process exists. Restarting..."
+            pm2 restart api-techbolt --update-env
+          else
+            echo "Process not found. Starting new PM2 process..."
+            pm2 start yarn --name api-techbolt -- run start
+          fi
+          pm2 save
