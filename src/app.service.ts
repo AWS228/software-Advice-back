@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { ContactusDto } from './dto/contactus.dto';
 import { MailService } from './mail/mail.service';
+import axios from 'axios';
 
 @Injectable()
 export class AppService {
@@ -12,6 +13,52 @@ export class AppService {
 
   async contactUs(contactusDto: ContactusDto) {
     const { name, email, subject, message } = contactusDto;
+
+    // get all contacts
+    const getContactsRes = await axios.get(
+      'https://api.hubapi.com/crm/v3/objects/contacts',
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.HUBSPOT_API_TOKEN}`,
+        },
+      },
+    );
+    if (getContactsRes.status !== 200) {
+      throw new InternalServerErrorException();
+    }
+    const existingContact = getContactsRes.data.results.find(
+      (item) => item.properties.email == email,
+    );
+    if (existingContact) {
+      // update contact
+      await axios.patch(
+        `https://api.hubapi.com/crm/v3/objects/contacts/${existingContact.id}`,
+        {
+          properties: { firstname: name, email, subject, message },
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.HUBSPOT_API_TOKEN}`,
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+    } else {
+      // create contact
+      await axios.post(
+        'https://api.hubapi.com/crm/v3/objects/contacts',
+        {
+          properties: { firstname: name, email, subject, message },
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.HUBSPOT_API_TOKEN}`,
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+    }
+
     await this.mailService.sendMail(
       email,
       subject,
