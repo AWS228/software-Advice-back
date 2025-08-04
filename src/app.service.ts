@@ -27,7 +27,7 @@ export class AppService {
       throw new InternalServerErrorException();
     }
     const existingContact = getContactsRes.data.results.find(
-      (item) => item.properties.email == email,
+      (item:any) => item.properties.email == email,
     );
     if (existingContact) {
       // update contact
