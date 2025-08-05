@@ -34,7 +34,7 @@ export class AppService {
       await axios.patch(
         `https://api.hubapi.com/crm/v3/objects/contacts/${existingContact.id}`,
         {
-          properties: { firstname: name, email, subject, message },
+          properties: { firstname: name, email, subject, message,hs_lead_status:'NEW' },
         },
         {
           headers: {
