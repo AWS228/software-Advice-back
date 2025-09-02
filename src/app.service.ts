@@ -60,7 +60,6 @@ export class AppService {
             email,
             subject,
             message,
-            hs_lead_status: 'NEW',
             lead_source: 'Website',
           },
         },
