@@ -11,22 +11,39 @@ export class AppService {
     return 'Welcome to TechBolted!';
   }
 
+  async getAllContacts() {
+    let after: string | undefined = undefined;
+    let allContacts: any[] = [];
+
+    do {
+      const res = await axios.get(
+        'https://api.hubapi.com/crm/v3/objects/contacts',
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.HUBSPOT_API_TOKEN}`,
+            'Content-Type': 'application/json',
+          },
+          params: {
+            limit: 100,
+            after,
+          },
+        },
+      );
+
+      allContacts = allContacts.concat(res.data.results);
+
+      after = res.data?.paging?.next?.after; // if undefined => no more pages
+    } while (after);
+
+    return allContacts;
+  }
+
   async contactUs(contactusDto: ContactusDto) {
     const { name, email, subject, message } = contactusDto;
 
     // get all contacts
-    const getContactsRes = await axios.get(
-      'https://api.hubapi.com/crm/v3/objects/contacts',
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.HUBSPOT_API_TOKEN}`,
-        },
-      },
-    );
-    if (getContactsRes.status !== 200) {
-      throw new InternalServerErrorException();
-    }
-    const existingContact = getContactsRes.data.results.find(
+    const getContactsRes: any = await this.getAllContacts();
+    const existingContact = getContactsRes.find(
       (item: any) => item.properties.email == email,
     );
     if (existingContact) {
@@ -39,8 +56,8 @@ export class AppService {
             email,
             subject,
             message,
-            // hs_lead_status: 'NEW',
-            // lead_source_test: 'Website',
+            hs_lead_status: 'NEW',
+            lead_source_test: 'Website',
           },
         },
         {
@@ -60,7 +77,7 @@ export class AppService {
             email,
             subject,
             message,
-            // lead_source_test: 'Website',
+            lead_source_test: 'Website',
           },
         },
         {
