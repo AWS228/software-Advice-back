@@ -40,7 +40,7 @@ export class AppService {
             subject,
             message,
             hs_lead_status: 'NEW',
-            lead_source: 'Website',
+            lead_source: 4,
           },
         },
         {
@@ -61,7 +61,7 @@ export class AppService {
             subject,
             message,
             hs_lead_status: 'NEW',
-            lead_source: 'Website',
+            lead_source: 4,
           },
         },
         {
