@@ -27,14 +27,21 @@ export class AppService {
       throw new InternalServerErrorException();
     }
     const existingContact = getContactsRes.data.results.find(
-      (item:any) => item.properties.email == email,
+      (item: any) => item.properties.email == email,
     );
     if (existingContact) {
       // update contact
       await axios.patch(
         `https://api.hubapi.com/crm/v3/objects/contacts/${existingContact.id}`,
         {
-          properties: { firstname: name, email, subject, message,hs_lead_status:'NEW' },
+          properties: {
+            firstname: name,
+            email,
+            subject,
+            message,
+            hs_lead_status: 'NEW',
+            lead_source: 'Website',
+          },
         },
         {
           headers: {
@@ -48,7 +55,14 @@ export class AppService {
       await axios.post(
         'https://api.hubapi.com/crm/v3/objects/contacts',
         {
-          properties: { firstname: name, email, subject, message },
+          properties: {
+            firstname: name,
+            email,
+            subject,
+            message,
+            hs_lead_status: 'NEW',
+            lead_source: 'Website',
+          },
         },
         {
           headers: {
