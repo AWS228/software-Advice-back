@@ -39,7 +39,7 @@ export class AppService {
             email,
             subject,
             message,
-            hs_lead_status: 'NEW',
+            // hs_lead_status: 'NEW',
             lead_source_test: 'Website',
           },
         },
