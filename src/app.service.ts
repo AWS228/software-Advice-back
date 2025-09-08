@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ContactusDto } from './dto/contactus.dto';
 import { MailService } from './mail/mail.service';
 import axios from 'axios';
