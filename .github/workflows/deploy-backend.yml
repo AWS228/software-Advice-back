@@ -12,8 +12,8 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Copy Environment File
-        run: cp /var/www/html/techbolted-envs/env-backend .env
+      #- name: Copy Environment File
+        #run: cp /var/www/html/techbolted-envs/env-backend .env
 
       - name: Install Dependencies
         run: yarn install
