@@ -22,9 +22,6 @@ export class AppService {
           headers: {
             Authorization: `Bearer ${process.env.HUBSPOT_API_TOKEN}`,
             'Content-Type': 'application/json',
-            'Cache-Control': 'no-cache, no-store, must-revalidate',
-            Pragma: 'no-cache',
-            Expires: '0',
           },
           params: {
             limit: 100,
@@ -67,6 +64,9 @@ export class AppService {
           headers: {
             Authorization: `Bearer ${process.env.HUBSPOT_API_TOKEN}`,
             'Content-Type': 'application/json',
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            Pragma: 'no-cache',
+            Expires: '0',
           },
         },
       );
@@ -87,6 +87,9 @@ export class AppService {
           headers: {
             Authorization: `Bearer ${process.env.HUBSPOT_API_TOKEN}`,
             'Content-Type': 'application/json',
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            Pragma: 'no-cache',
+            Expires: '0',
           },
         },
       );
